@@ -54,9 +54,11 @@ if [ -n "$PKG_URL" ]; then
     printf "%${BUILD_INDENT}c ${boldcyan}GET${endcolor}      $1\n" ' '>&$SILENT_OUT
     export BUILD_INDENT=$((${BUILD_INDENT:-1}+$BUILD_INDENT_SIZE))
 
-    [ -f "$MD5SUM" -a -f "$PACKAGE" ] && MD5SUM_TOCOMP=$(<$MD5SUM)
+    [ -f "$MD5SUM" -a -f "$PACKAGE" ] && MD5SUM_TOCOMP=$(<"$MD5SUM")
     [ -n "$MD5SUM_TOCOMP" ] && {
-        [ "$(md5sum -t $PACKAGE)" = "$MD5SUM_TOCOMP" ] && DL="no"
+      if [ "$(md5sum -t $PACKAGE)" = "$MD5SUM_TOCOMP" ] ; then
+        DL="no"
+      fi
     }
 
     [ "$DL" = "yes" ] && {
